@@ -1,0 +1,172 @@
+{%  extends 'base.html' %}
+
+{% block favicon %}
+    {{ url_for('static', filename='img/favicon_main.svg') }}
+{% endblock %}
+
+{% block body %}
+    {% if current_user.user_post == 'Администратор' %}
+        <section class="filterBtn" style="padding: 0 !important;">
+            <p id="filtersBtn" style="font-size: 20px; font-weight: 500; cursor: pointer">Фильтровать</p>
+            <svg id="arrow" width="1.5em" height="1.5em" viewBox="0 10 16 1" class="bi bi-arrow-down-short" fill="currentColor" xmlns="http://www.w3.org/2000/svg"> <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5A.5.5 0 0 1 8 4z"/>
+            </svg>
+        </section>
+        <section class="list-of-auto">
+            <section class="filters container" style="padding: 0 !important;" id="filters">
+                <div class="type-choose-block">
+                    <p>Тип техники:</p>
+                    <select name="car_type" id="car_type" class="select form-control" >
+                        <option value="any">Любой</option>
+                        {% for type in types %}
+                            <option value="{{ type.type }}">{{ type.type }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="clean-status-choose">
+                    <p>Статус уборки:</p>
+                    <select name="clean_status" id="clean_status" class="select form-control">
+                        <option value="any">Любой</option>
+                        <option value="Не убрано">Не убрано</option>
+                        <option value="Убрано">Убрано</option>
+                    </select>
+                </div>
+                <div class="tech-status-choose">
+                    <p>Статус тех. обслуживания:</p>
+                    <select name="tech_status" id="tech_status" class="select form-control">
+                        <option value="any">Любой</option>
+                        <option value="Не обслужено">Не обслужено</option>
+                        <option value="Обслужено">Обслужено</option>
+                    </select>
+                </div>
+                <div class="car-status-choose">
+                    <p>Статус готовности техники:</p>
+                    <select name="car_status" id="car_status" class="select form-control">
+                        <option value="any">Любой</option>
+                        <option value="Не готово">Не готово</option>
+                        <option value="Готово">Готово</option>
+                    </select>
+                </div>
+                <button class="btn btn-warning"><a style="color: #000; text-decoration: none" href="{{ url_for('index') }}">Сбросить фильтры</a></button>
+            </section>
+    {% endif %}
+        <section class="auto-list">
+            {% if current_user.user_post == 'Уборщик' %}
+                {% for car in cars %}
+                    {% if car.clean_status == 'Не убрано' %}
+                        <form class="form-change-status" method="POST" id="{{ car.id }}">
+                            {{ form_status.hidden_tag() }}
+                            <input type="hidden" value="{{ car.id }}" name="id">
+                            <div class="car-info container">
+                                <div class="car-info-element" style="width: 200px">
+                                    <h5>Тип:</h5>
+                                    <span>{{ car.car_type }}</span>
+                                </div>
+                                <div class="car-info-element">
+                                    <h5>Госномер:</h5>
+                                    <span>{{ car.car_plate_number }}</span>
+                                </div>
+                                <div class="car-info-element">
+                                    <h5>{{ form_status.clean_status.label }}</h5>
+                                    <span>{{ form_status.clean_status }}</span>
+                                </div>
+                                <div class="car-info-element">
+                                    {{ form_status.submit(class='btn btn-lg btn-primary') }}
+                                </div>
+                            </div>
+                        </form>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+            {% if current_user.user_post == 'Техник' %}
+                {% for car in cars %}
+                    {% if car.tech_status == 'Не обслужено' %}
+                        <form class="form-change-status" method="POST" id="{{ car.id }}">
+                            {{ form_status.hidden_tag() }}
+                            <input type="hidden" value="{{ car.id }}" name="id">
+                            <div class="car-info container">
+                                <div class="car-info-element" style="width: 200px">
+                                    <h5>Тип:</h5><span>{{ car.car_type }}</span>
+                                </div>
+                                <div class="car-info-element">
+                                    <h5>Госномер:</h5>
+                                    <span>{{ car.car_plate_number }}</span>
+                                </div>
+                                <div class="car-info-element">
+                                    <h5>{{ form_status.tech_status.label }}</h5>
+                                    <span>{{ form_status.tech_status }}</span>
+                                </div>
+                                <div class="car-info-element">
+                                    {{ form_status.submit(class='btn btn-lg btn-primary') }}
+                                </div>
+                            </div>
+                        </form>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+            {% if current_user.user_post == 'Администратор' %}
+                {% for car in cars %}
+                    <form class="admin-form" method="POST" id="{{ car.id }}">
+                        {{ form_status.hidden_tag() }}
+                        <input type="hidden" value="{{ car.id }}" name="id">
+                        <div class="car-info container">
+                            <div class="car-info-element">
+                                <h5>ID:</h5>
+                                <span>{{ car.id }}</span>
+                            </div>
+                            <div class="car-info-element" style="width: 200px">
+                                <h5>Тип:</h5><span>{{ car.car_type }}</span>
+                            </div>
+                            <div class="car-info-element">
+                                <h5>Госномер:</h5>
+                                <span>{{ car.car_plate_number }}</span>
+                            </div>
+                            <div class="car-info-element">
+                                <h5>Статус обслуживания:</h5>
+                                {% if car.tech_status == 'Обслужено' %}
+                                    <span style="background-color: #75c045; padding: 2% 5%; border-radius: 0.2rem">{{ car.tech_status }}</span>
+                                {% else %}
+                                    <span style="background-color: red; padding: 2% 5%; border-radius: 0.2rem">{{ car.tech_status }}</span>
+                                {% endif %}
+                            </div>
+                            <div class="car-info-element">
+                                    <h5>Статус уборки:</h5>
+                                    {% if car.clean_status == 'Убрано' %}
+                                        <span style="background-color: #75c045; padding: 2% 5%; border-radius: 0.2rem">{{ car.clean_status }}</span>
+                                    {% else %}
+                                        <span style="background-color: red; padding: 2% 5%; border-radius: 0.2rem">{{ car.clean_status }}</span>
+                                    {% endif %}
+                                </div>
+                            <div class="car-info-element">
+                                <h5>Последнее тех. обслуживание:</h5>
+                                <span>
+                                    {% if car.last_repairing %}
+                                        {{ car.last_repairing }}
+                                    {% else %}
+                                        Еще не было обслужено
+                                    {% endif %}
+                                </span>
+                            </div>
+                            <div class="car-info-element">
+                                <h5>Последняя уборка:</h5>
+                                <span>
+                                    {% if car.last_cleaning %}
+                                        {{ car.last_cleaning }}
+                                    {% else %}
+                                        Еще не было убрано
+                                    {% endif %}
+                                </span>
+                            </div>
+                        </div>
+                    </form>
+                {% endfor %}
+            {% endif %}
+        </section>
+    </section>
+{% endblock %}
+
+{% block scripts %}
+    {% if current_user.user_post == 'Администратор' %}
+        <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+    {% endif %}
+{% endblock %}

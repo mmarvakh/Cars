@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block favicon %}
+    {{ url_for('static', filename='img/favicon_enter.svg') }}
+{% endblock %}
+
+{% block nav %}{% endblock %}
+
+{% block body %}
+    <form class="form-sign" method="POST" novalidate>
+        {{ form.hidden_tag() }}
+        <img class="mb-4" src="{{ url_for('static', filename='img/sign_in_icon.svg') }}" alt="" width="72" height="72">
+        <h1 class="h3 mb-3 font-weight-normal">Выполните вход</h1>
+        {{ form.username(class='form-control', placeholder='Логин') }}
+        {% for error in form.username.errors %}
+            <span style="color: rebeccapurple">{{ error }}</span>
+        {% endfor %}
+        {{ form.password(class='form-control', placeholder='Пароль') }}
+        {% for error in form.password.errors %}
+            <span style="color: rebeccapurple">{{ error }}</span>
+        {% endfor %}
+        {{ form.submit(class='btn btn-lg btn-primary btn-block') }}
+        <p class="mt-5 mb-3 text-muted">© Marvakh Mark</p>
+    </form>
+{% endblock %}
+
+{% block footer %}
+{% endblock %}

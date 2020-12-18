@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block favicon %}
+    {{ url_for('static', filename='img/favicon_main.svg') }}
+{% endblock %}
+
+{% block body %}
+    <section class="admin-forms">
+        <form method="POST" class="form-add-auto">
+            <h4 class="h4">Добавить авто в базу</h4>
+            {{ form_cars.hidden_tag() }}
+
+            {{ form_cars.type.label }}
+            {{ form_cars.type(class='form-control') }}
+
+            {{ form_cars.plate_number.label }}
+            {{ form_cars.plate_number(class='form-control', placeholder='А123БВ197') }}
+
+            {{ form_cars.submit(class='btn btn-lg btn-primary btn-block') }}
+        </form>
+        <form method="POST" class="form-add-staff">
+            <h4 class="h4">Добавить работника в базу</h4>
+            {{ form_staff.hidden_tag() }}
+
+            {{ form_staff.user_name.label }}
+            {{ form_staff.user_name(class='form-control', placeholder='Иван Иванов') }}
+
+            {{ form_staff.birth_day.label }}
+            {{ form_staff.birth_day(class='form-control', placeholder='10-08-1995') }}
+
+            {{ form_staff.gender.label }}
+            {{ form_staff.gender(class='form-control') }}
+
+            {{ form_staff.user_login.label }}
+            {{ form_staff.user_login(class='form-control', placeholder='ivanov') }}
+
+            {{ form_staff.user_password.label }}
+            {{ form_staff.user_password(class='form-control', placeholder='ivanov123') }}
+
+            {{ form_staff.user_post.label }}
+            {{ form_staff.user_post(class='form-control') }}
+
+            {{ form_staff.submit(class='btn btn-lg btn-primary btn-block') }}
+        </form>
+    </section>
+    <hr>
+    <section class="delete-form">
+
+    </section>
+{% endblock %}

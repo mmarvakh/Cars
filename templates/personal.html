@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block favicon %}
+{{ url_for('static', filename='img/sign_in_icon.svg') }}
+{% endblock %}
+
+{% block body %}
+<section class="personal-page">
+    <section class="info-header"><h4>{{ current_user.user_name }}</h4></section>
+    <hr>
+    <div class="personal-card">
+        <img src="{{ user.avatar(94) }}">
+        <div class="personal-info">
+            <p>
+                Имя, фамилия:
+                <span>
+                        {% if user.user_name %}
+                            {{ user.user_name }}
+                        {% else %}
+                            Не указано
+                        {% endif %}
+                    </span>
+            </p>
+            <p>
+                Дата рождения:
+                <span>
+                        {% if info.birth_day %}
+                            {{ info.birth_day }}
+                        {% else %}
+                            Не указано
+                        {% endif %}
+                    </span>
+            </p>
+            <p>
+                Пол:
+                <span>
+                        {% if info.gender %}
+                            {{ info.gender }}
+                        {% else %}
+                            Не указано
+                        {% endif %}
+                    </span>
+            </p>
+        </div>
+    </div>
+    <section class="all-notes">
+        <section class="personal-service-filters">
+            <p>Выполненные обслуживания:</p>
+            <p>Фильтровать</p>
+        </section>
+        <section class="filter-for-notes">
+            <div class="filters-wrapper">
+                
+            </div>
+        </section>
+        {% for note in notes %}
+        <div class="notes">
+            <div class="date-accounting">
+                <span style="font-size: 14px; font-weight: 500">Дата обслуживания:</span>
+                <span>{{ note.date }}</span>
+            </div>
+            {% if current_user.user_post == "Администратор" %}
+                <div class="staff-id">
+                    <span style="font-size: 14px; font-weight: 500">Идентификатор сотрудника:</span>
+                    <span>{{ note.id_staff }}</span>
+                </div>
+            {% endif %}
+            <div class="car-id">
+                <span style="font-size: 14px; font-weight: 500">Идентификатор тех. средства:</span>
+                <span>{{ note.id_car }}</span>
+            </div>
+        </div>
+        <hr>
+        {% endfor %}
+    </section>
+</section>
+{% endblock %}

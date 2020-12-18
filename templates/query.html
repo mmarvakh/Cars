@@ -1,0 +1,59 @@
+{% if cars %}
+    {% for car in cars %}
+        <section class="admin-form">
+            <div class="car-info container">
+                <div class="car-info-element">
+                    <h5>ID:</h5>
+                    <span>{{ car.id }}</span>
+                </div>
+                <div class="car-info-element" style="width: 200px">
+                    <h5>Тип:</h5><span>{{ car.car_type }}</span>
+                </div>
+                <div class="car-info-element">
+                    <h5>Госномер:</h5>
+                    <span>{{ car.car_plate_number }}</span>
+                </div>
+                <div class="car-info-element">
+                    <h5>Статус обслуживания:</h5>
+                    {% if car.tech_status == 'Обслужено' %}
+                    <span style="background-color: #75c045; padding: 2% 5%; border-radius: 0.2rem">{{ car.tech_status }}</span>
+                    {% else %}
+                    <span style="background-color: red; padding: 2% 5%; border-radius: 0.2rem">{{ car.tech_status }}</span>
+                    {% endif %}
+                </div>
+                <div class="car-info-element">
+                    <h5>Статус уборки:</h5>
+                    {% if car.clean_status == 'Убрано' %}
+                    <span style="background-color: #75c045; padding: 2% 5%; border-radius: 0.2rem">{{ car.clean_status }}</span>
+                    {% else %}
+                    <span style="background-color: red; padding: 2% 5%; border-radius: 0.2rem">{{ car.clean_status }}</span>
+                    {% endif %}
+                </div>
+                <div class="car-info-element">
+                    <h5>Последнее тех. обслуживание:</h5>
+                    <span>
+                        {% if car.last_repairing %}
+                            {{ car.last_repairing }}
+                        {% else %}
+                            Еще не было обслужено
+                        {% endif %}
+                    </span>
+                </div>
+                <div class="car-info-element">
+                    <h5>Последняя уборка:</h5>
+                    <span>
+                        {% if car.last_cleaning %}
+                            {{ car.last_cleaning }}
+                        {% else %}
+                            Еще не было убрано
+                        {% endif %}
+                    </span>
+                </div>
+            </div>
+        </section>
+    {% endfor %}
+{% else %}
+    <section class="container" style="margin-top: 2%; padding: 0 !important;">
+        <h3>В автопарке нет техники, подходящей под выбранные фильтры</h3>
+    </section>
+{% endif %}
